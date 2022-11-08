@@ -1,38 +1,44 @@
-import { Component, OnInit } from "@angular/core";
-import { RequestBackendService } from "../request-backend.service";
+import { Component, OnInit } from '@angular/core';
+import { RequestBackendService } from '../request-backend.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: "crud-usuarios",
-  templateUrl: "./crud-usuarios.component.html",
-  styleUrls: ["./crud-usuarios.component.scss"],
+  selector: 'crud-usuarios',
+  templateUrl: './crud-usuarios.component.html',
+  styleUrls: ['./crud-usuarios.component.scss'],
 })
 export class CrudUsuariosComponent implements OnInit {
-  titulo = "Hola";
+  titulo = 'Hola';
 
-  value = "";
+  value = '';
 
   edad = 0;
-  nombreUsuarioSeleccionado = "";
+  nombreUsuarioSeleccionado = '';
 
   displayedColumns: string[] = [
-    "nombre",
-    "telefono",
-    "fechaNacimiento",
-    "tipoUsuario",
+    'nombre',
+    'telefono',
+    'tipoUsuario',
+    'fechaNacimiento',
   ];
-  dataSource: any = [];
+  datos = [];
 
-  constructor(private servicioBackend: RequestBackendService) {
-    this.servicioBackend.getData("usuarios").subscribe(
-      (data) => {
-        this.dataSource = data;
-      },
+  formUser: FormGroup = new FormGroup({});
 
-      (error) => {
-        console.log(error);
-        this.dataSource = [];
-      }
-    );
+  constructor(
+    private servicioBackend: RequestBackendService,
+    private fb: FormBuilder
+  ) {
+    this.getUsers();
+
+    this.formUser = this.fb.group({
+      nombre: [''],
+      telefono: [''],
+      tipoUsuario: [''],
+      fechaNacimiento: ['2022-11-08T00:22:27.812Z'],
+      contrasenia: ['111'],
+      sedeId: ['63557cfb71cf34a13bd99ad7'],
+    });
   }
 
   ngOnInit(): void {}
@@ -42,23 +48,47 @@ export class CrudUsuariosComponent implements OnInit {
   // }
 
   focusBuscar(): void {
-    console.log("hizo focus");
+    console.log('hizo focus');
   }
 
   blurBuscar(): void {
-    console.log("salio del focus");
+    console.log('salio del focus');
   }
 
   seleccionarNombre(nombreNuevo: string): void {
     this.nombreUsuarioSeleccionado = nombreNuevo;
   }
 
-  cambiarNombreUsuario(nombreNuevo: string): void {
-    for (const key in this.dataSource) {
-      if (this.dataSource[key].name == this.nombreUsuarioSeleccionado) {
-        this.dataSource[key].name = nombreNuevo;
-        return;
+  getUsers(): void {
+    this.servicioBackend.getData('usuarios').subscribe(
+      (data) => {
+        console.log(data);
+        this.datos = data;
+      },
+
+      (error) => {
+        console.log('Error: ' + error);
       }
-    }
+    );
+  }
+
+  saveUser(): void {
+    const datosUser = this.formUser.getRawValue();
+    console.log(datosUser);
+
+    this.servicioBackend
+      .postData('usuarios', JSON.stringify(datosUser))
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.getUsers();
+        },
+        error: (error) => {
+          console.log(error);
+        },
+        complete: () => {
+          console.log('complete');
+        },
+      });
   }
 }
