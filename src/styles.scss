@@ -14,3 +14,16 @@ button {
     background-color: blue !important;
     padding: 30px;
 }
+
+.cls-button-circle {
+    background: #9fa7f1;
+    color: #fff;
+    padding: 7px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
