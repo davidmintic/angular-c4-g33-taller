@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ComunicadorService } from '../comunicador.service';
 
 @Component({
   selector: 'crud-vehiculos',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./crud-vehiculos.component.scss'],
 })
 export class CrudVehiculosComponent implements OnInit {
-  constructor() {}
+  constructor(private comunicador: ComunicadorService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.comunicador.titulo = '';
+  }
 }

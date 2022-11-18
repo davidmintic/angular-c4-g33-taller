@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,32 @@ export class RequestBackendService {
 
   getData(entity: string): Observable<any> {
     return this.http.get(this.url + entity);
+  }
+
+  getDataFilter(
+    entity: string,
+    data: string,
+    keyName: string
+  ): Observable<any> {
+    const field: any = {};
+    field[keyName] = { like: data, options: 'i' };
+
+    const filter = {
+      where: field,
+    };
+
+    const params = new HttpParams().append('filter', JSON.stringify(filter));
+
+    // const headers = new HttpHeaders({
+    //   'Content-type': 'application/json',
+    // });
+
+    const httOptions = {
+      // headers,
+      params,
+    };
+
+    return this.http.get(this.url + entity, httOptions);
   }
 
   postData(entity: string, datos: string): Observable<any> {
