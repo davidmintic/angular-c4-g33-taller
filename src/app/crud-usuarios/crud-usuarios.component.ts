@@ -1,33 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { RequestBackendService } from '../request-backend.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import Swal from 'sweetalert2';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogUsuariosComponent } from './dialog-usuarios/dialog-usuarios.component';
-import { format } from 'date-fns';
-import { ComunicadorService } from '../comunicador.service';
+import { Component, OnInit } from "@angular/core";
+import { RequestBackendService } from "../request-backend.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import Swal from "sweetalert2";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogUsuariosComponent } from "./dialog-usuarios/dialog-usuarios.component";
+import { format } from "date-fns";
+import { LayoutService } from "../layout.service";
 
 @Component({
-  selector: 'crud-usuarios',
-  templateUrl: './crud-usuarios.component.html',
-  styleUrls: ['./crud-usuarios.component.scss'],
+  selector: "crud-usuarios",
+  templateUrl: "./crud-usuarios.component.html",
+  styleUrls: ["./crud-usuarios.component.scss"],
 })
 export class CrudUsuariosComponent implements OnInit {
-  titulo = 'Hola';
+  titulo = "Hola";
 
-  modeForm = 'adicion';
+  modeForm = "adicion";
 
-  value = '';
+  value = "";
 
   edad = 0;
-  nombreUsuarioSeleccionado = '';
+  nombreUsuarioSeleccionado = "";
 
   displayedColumns: string[] = [
-    'nombre',
-    'telefono',
-    'tipoUsuario',
-    'fechaNacimiento',
-    'acciones',
+    "nombre",
+    "telefono",
+    "tipoUsuario",
+    "fechaNacimiento",
+    "acciones",
   ];
   datos = [];
 
@@ -37,20 +37,20 @@ export class CrudUsuariosComponent implements OnInit {
 
   constructor(
     private servicioBackend: RequestBackendService,
-    private comunicador: ComunicadorService,
+    private comunicador: LayoutService,
     private fb: FormBuilder,
     private dialog: MatDialog
   ) {
     this.getUsers();
-    this.comunicador.titulo = 'Hola soy crud usuarios';
+    this.comunicador.titulo = "Hola soy crud usuarios";
 
     this.formUser = this.fb.group({
-      nombre: [''],
-      telefono: [''],
-      tipoUsuario: [''],
-      fechaNacimiento: ['2022-11-08T00:22:27.812Z'],
-      contrasenia: ['111'],
-      sedeId: ['63557cfb71cf34a13bd99ad7'],
+      nombre: [""],
+      telefono: [""],
+      tipoUsuario: [""],
+      fechaNacimiento: ["2022-11-08T00:22:27.812Z"],
+      contrasenia: ["111"],
+      sedeId: ["63557cfb71cf34a13bd99ad7"],
     });
   }
 
@@ -61,11 +61,11 @@ export class CrudUsuariosComponent implements OnInit {
   // }
 
   focusBuscar(): void {
-    console.log('hizo focus');
+    console.log("hizo focus");
   }
 
   blurBuscar(): void {
-    console.log('salio del focus');
+    console.log("salio del focus");
   }
 
   seleccionarNombre(nombreNuevo: string): void {
@@ -73,20 +73,20 @@ export class CrudUsuariosComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.servicioBackend.getData('usuarios').subscribe(
+    this.servicioBackend.getData("usuarios").subscribe(
       (data) => {
         console.log(data);
         this.datos = data;
       },
 
       (error) => {
-        console.log('Error: ' + error);
+        console.log("Error: " + error);
       }
     );
   }
 
   changeShowForm() {
-    this.modeForm = 'adicion';
+    this.modeForm = "adicion";
     this.showForm = !this.showForm;
   }
 
@@ -94,25 +94,25 @@ export class CrudUsuariosComponent implements OnInit {
     console.log(code);
 
     Swal.fire({
-      title: '¿Está seguro de eliminar el usuario?',
+      title: "¿Está seguro de eliminar el usuario?",
       showDenyButton: false,
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: "Eliminar",
       // denyButtonText: `Don't save`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.servicioBackend.deleteData('usuarios', code).subscribe({
+        this.servicioBackend.deleteData("usuarios", code).subscribe({
           next: (data) => {
             this.getUsers();
-            Swal.fire('Ok!', 'Eliminado', 'success');
+            Swal.fire("Ok!", "Eliminado", "success");
           },
           error: (error) => {
             console.log(error);
-            Swal.fire('Usuario NO eliminado', 'Ocurrió un error', 'error');
+            Swal.fire("Usuario NO eliminado", "Ocurrió un error", "error");
           },
           complete: () => {
-            console.log('complete');
+            console.log("complete");
           },
         });
       }
@@ -121,14 +121,14 @@ export class CrudUsuariosComponent implements OnInit {
 
   selectUserEdit(user: any): void {
     this.showForm = true;
-    this.modeForm = 'edicion';
+    this.modeForm = "edicion";
     this.formUser.patchValue(user);
   }
 
   openDialogAdd() {
     const dialogRef = this.dialog.open(DialogUsuariosComponent, {
       data: {
-        modeForm: 'adicion',
+        modeForm: "adicion",
       },
     });
 
@@ -143,7 +143,7 @@ export class CrudUsuariosComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogUsuariosComponent, {
       data: {
         user: user,
-        modeForm: 'edicion',
+        modeForm: "edicion",
       },
     });
 
@@ -156,20 +156,20 @@ export class CrudUsuariosComponent implements OnInit {
 
   setFormat(dateSting: string): string {
     const date = new Date(dateSting);
-    const newDate = format(date, 'd LLL yyyy');
+    const newDate = format(date, "d LLL yyyy");
     return newDate;
   }
 
   filtrar() {
     this.servicioBackend
-      .getDataFilter('usuarios', this.value, 'nombre')
+      .getDataFilter("usuarios", this.value, "nombre")
       .subscribe(
         (data) => {
           this.datos = data;
         },
 
         (error) => {
-          console.log('Error: ' + error);
+          console.log("Error: " + error);
         }
       );
   }

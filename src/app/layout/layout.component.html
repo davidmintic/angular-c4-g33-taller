@@ -1,12 +1,14 @@
 <div>
-  <div>
+  <div *ngIf="servicioLayout.isAuthenticate">
     <toolbar></toolbar>
   </div>
 
   <div style="display: flex">
     <sidebar
+      *ngIf="servicioLayout.isAuthenticate"
       style="width: 150px; background-color: #dfe2ff; padding: 10px"
     ></sidebar>
+
     <content
       style="
         padding: 10px;
@@ -17,7 +19,7 @@
     ></content>
   </div>
 
-  <div>
+  <div *ngIf="servicioLayout.isAuthenticate">
     <footer></footer>
   </div>
 </div>

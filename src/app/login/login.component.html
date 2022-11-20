@@ -1,0 +1,21 @@
+<form action="" [formGroup]="formCredenciales" class="cls-form">
+  <h3>Login</h3>
+
+  <div class="cls-content-fields">
+    <mat-form-field appearance="fill">
+      <mat-label>Correo</mat-label>
+      <input matInput placeholder="correo" formControlName="correo" />
+      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+      <!-- <mat-hint>Hint</mat-hint> -->
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Contraseña</mat-label>
+      <input matInput placeholder="contraseña" formControlName="contrasenia" />
+      <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+      <!-- <mat-hint>Hint</mat-hint> -->
+    </mat-form-field>
+
+    <button>Iniciar</button>
+  </div>
+</form>
